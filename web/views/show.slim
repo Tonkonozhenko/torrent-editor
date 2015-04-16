@@ -1,0 +1,12 @@
+h1 Torrent "#{@torrent.name}"
+
+table
+  tr
+    th Length
+    th MD5
+    th path
+  - @torrent.files.each do |file|
+    tr
+      td = file.length
+      td = file.md5sum
+      td = file.path

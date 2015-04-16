@@ -1,0 +1,14 @@
+h2 Torrents
+table
+  tr
+    th Name
+    th Download
+  - @torrents.each do |torrent|
+    tr
+      td : a href="/#{torrent.id}" = torrent.name
+      td : a href="/#{torrent.id}/download" Download
+
+h2 Add new
+form method="post" action="/" enctype="multipart/form-data"
+  input name="file" type="file"
+  input type="submit"

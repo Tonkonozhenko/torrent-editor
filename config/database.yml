@@ -1,0 +1,19 @@
+defaults: &defaults
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+  host: localhost
+  username: postgres
+  password: postgres
+
+development:
+  <<: *defaults
+  database: torrent_editor_development
+
+test:
+  <<: *defaults
+  database: torrent_editor_test
+
+production:
+  <<: *defaults
+  database: torrent_editor_development
