@@ -1,12 +1,70 @@
-h1 Torrent "#{@torrent.name}"
+a href="/#{@torrent.id}/download" Download
 
-table
-  tr
-    th Length
-    th MD5
-    th path
-  - @torrent.files.each do |file|
-    tr
-      td = file.length
-      td = file.md5sum
-      td = file.path
+br
+
+form method="post" action="/#{params[:id]}" enctype="multipart/form-data"
+  - if @torrent.is_directory?
+    label
+      ' Root directory name:
+      br
+      input name="name" value="#{@torrent.name}" size="128"
+    br
+    label
+      ' Trackers:
+      br
+      textarea name="announce_list" rows="5" cols="100" = @torrent.announce_list.map(&:first).join("\n")
+    br
+    label
+      ' Comment:
+      br
+      input name="comment" value="#{@torrent.comment}" size="128"
+    br
+    label
+      ' Creation date:
+      br
+      input name="creation_date" value="#{@torrent.creation_date}" size="128"
+    br
+    label
+      ' Created by:
+      br
+      input name="created_by" value="#{@torrent.created_by}" size="128"
+    br
+    label
+      ' Encoding:
+      br
+      input name="encoding" value="#{@torrent.encoding}" size="128"
+    br
+
+    table
+      tr
+        th Length
+        th MD5
+        th path
+      tr
+        td align="center"
+          i Length of the file in bytes
+        td align="center"
+          i MD5 sum of the file.
+        td align="center"
+          i Relative path to file, e.g. "a/b c/d.txt"
+        td
+          i Remove file
+      - @torrent.files.each_with_index do |file, i|
+        tr
+          td
+            input type="hidden" name="files[#{i}][old_path]" value="#{file.path.join('/')}"
+            input name="files[#{i}][length]" value="#{file.length}"
+          td
+            input name="files[#{i}][md5sum]" value="#{file.md5sum}" size="32"
+          td
+            input name="files[#{i}][path]" value="#{file.path.join('/')}" size="128"
+          td align="center"
+            input type="button" value="-" class="delete-button"
+      tr
+        td colspan="4" align="center"
+          input type="button" value="Add new file" class="add-button"
+
+  br
+  br
+
+  input type="submit"

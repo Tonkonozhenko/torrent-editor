@@ -1,3 +1,4 @@
+require_relative 'torrent_editor/core_ext/nil_class'
 require_relative 'torrent_editor/torrent'
 require_relative 'torrent_editor/torrent_file'
 require_relative 'torrent_editor/db_record'

@@ -17,20 +17,7 @@ gem 'pg'
 gem 'slim'
 gem 'quiet_assets'
 
-gem 'bencode'
-gem 'bencoder', path: 'gems/bencoder'
-
-# gem 'redis'
-# gem 'hiredis'
-# gem 'sidekiq'
-
-# gem 'nokogiri'
-# gem 'rest-client'
-
-# gem 'rubyzip'
+gem 'bencode', path: 'gems/bencode'
 
 gem 'better_errors'
 gem 'binding_of_caller'
-
-# require_relative 'lib/torrent_editor/torrent_editor'
-# include TorrentEditor

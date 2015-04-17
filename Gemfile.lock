@@ -1,7 +1,7 @@
 PATH
-  remote: gems/bencoder
+  remote: gems/bencode
   specs:
-    bencoder (0.1.0)
+    bencode (0.8.2)
 
 GEM
   remote: https://rubygems.org/
@@ -34,7 +34,6 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.0)
     backports (3.6.4)
-    bencode (0.8.2)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -112,8 +111,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
-  bencode
-  bencoder!
+  bencode!
   better_errors
   binding_of_caller
   bundler

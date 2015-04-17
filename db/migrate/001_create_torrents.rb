@@ -8,6 +8,7 @@ class CreateTorrents < ActiveRecord::Migration
       t.string :created_by
       t.string :encoding
 
+      t.text :pieces
       t.integer :piece_length
       t.integer :private
 

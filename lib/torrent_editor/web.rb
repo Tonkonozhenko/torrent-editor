@@ -27,7 +27,7 @@ module TorrentEditor
 
     get '/' do
       @torrents = Torrent.all
-      slim :index
+      slim :index, layout: :application
     end
 
     post '/' do
@@ -38,14 +38,58 @@ module TorrentEditor
 
     get '/:id' do
       @torrent = Torrent.find(params['id'])
-      slim :show
+      slim :show, layout: :application
     end
 
     get '/:id/download' do
       content_type 'application/x-bittorrent'
-      row = Torrent.find(params['id']).row
-      headers['Content-Disposition'] = "attachment;filename=#{row.name}.torrent"
-      row.content
+      torrent = Torrent.find(params['id'])
+      headers['Content-Disposition'] = "attachment;filename=#{torrent.name}.torrent"
+      torrent.to_torrent
+    end
+
+    def torrent_files_params
+      params[:files].inject({}) do |hsh, (_, v)|
+        key = v['old_path']
+        hsh[key] = v.slice('length', 'md5sum', '_destroy')
+        hsh[key]['path'] = v['path'].split('/')
+        hsh[key]['length'] = hsh[key]['length'].to_i if hsh[key]['length'].present?
+        hsh
+      end
+    end
+
+    post '/:id' do
+      torrent = Torrent.find(params['id'])
+
+      opts = params.slice(*%w[name comment created_by encoding creation_date])
+      opts[:announce_list] = params[:announce_list].split("\n").map { |e| [e] }
+      torrent.update(opts)
+
+      # Save attributes for files
+      files_params = torrent_files_params
+
+      # Collect files that should be deleted
+      files_to_delete = []
+      torrent.files.each do |file|
+        path = file.path.join('/')
+        attrs = files_params[path]
+        # Remove file if it is marked as destroyed
+        if attrs['_destroy'] == 'true'
+          files_to_delete << file
+        else
+          file.update(attrs)
+        end
+        files_params.delete path
+      end
+      torrent.files -= files_to_delete
+
+      # Add new files to torrent
+      # TODO
+
+      # Save whole torrent
+      torrent.save
+
+      redirect "/#{torrent.row.id}"
     end
   end
 end
