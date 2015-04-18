@@ -3,6 +3,7 @@
   a href="/#{@torrent.id}/download" Download
   br
 
+- directory = @torrent.is_directory?
 = form_for @torrent, url, method: :post, as: :torrent do |f|
   label
     ' Root directory name:
@@ -39,14 +40,14 @@
     tr
       th Length
       th MD5
-      - if @torrent.is_directory?
+      - if directory
         th path
     tr
       td align="center"
         i Length of the file in bytes
       td align="center"
         i MD5 sum of the file.
-      - if @torrent.is_directory?
+      - if directory
         td align="center"
           i Relative path to file, e.g. "a/b c/d.txt"
       td
@@ -57,7 +58,7 @@
           = ff.text_field :length
         td
           = ff.text_field :md5sum, size: 32
-        - if @torrent.is_directory?
+        - if directory
           td
             = ff.text_field :path, size: 128, value: ff.object.path.join('/')
         td align="center"

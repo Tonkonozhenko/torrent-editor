@@ -4,7 +4,6 @@ gem 'bundler'
 
 gem 'rake'
 gem 'rack'
-gem 'dotenv'
 
 gem 'thin'
 gem 'padrino'

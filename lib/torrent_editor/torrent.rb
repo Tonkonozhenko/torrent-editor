@@ -1,5 +1,7 @@
+# =Class for presenting whole torrent file
 module TorrentEditor
   class Torrent < ActiveRecord::Base
+    # Accordance db fields to torrent fields
     ATTRIBUTES = {
       announce: 'announce',
       announce_list: 'announce-list',
@@ -16,9 +18,11 @@ module TorrentEditor
       name: 'name'
     }
 
+    # DB associations
     has_many :files, class_name: TorrentFile, autosave: true
     accepts_nested_attributes_for :files, allow_destroy: true
 
+    # Default initialize from hash or from file
     def initialize(attributes)
       if attributes.is_a?(Tempfile) || attributes.is_a?(File)
         super({})
@@ -29,23 +33,28 @@ module TorrentEditor
       self
     end
 
+    # Parsing torrent file
     def normalize_from_file(file)
       file = open(file).read
       content = BEncode::Parser.new(file).parse!
 
+      # Simple fields
       ATTRIBUTES.except(:creation_date).each { |k, v| send("#{k}=", content[v]) }
       INFO_ATTRIBUTES.except(:pieces).each { |k, v| send("#{k}=", content['info'][v]) }
+      # Some specific fields
       self.pieces = Base64.encode64(content['info']['pieces'])
       self.creation_date = Time.at(content['creation date'])
 
+      # Parsing either in single-file or multi-file mode
       torrent_with_single_file = content['info']['files'].blank?
       if torrent_with_single_file
         files.build(content['info'].slice('length', 'md5sum'))
       else
-        content['info']['files'].each { |f| files.build(f) }
+        files.build content['info']['files']
       end
     end
 
+    # Predicate whether torrent is a directory or a file
     def is_directory?
       files.count > 1
     end
@@ -54,6 +63,7 @@ module TorrentEditor
       !is_directory?
     end
 
+    # Generating hash for torrent file and bencoding it
     def to_torrent
       content = {
         'announce' => announce,

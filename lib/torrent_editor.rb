@@ -8,6 +8,7 @@ require_relative 'torrent_editor/torrent_file'
 require_relative 'torrent_editor/torrent'
 require_relative 'torrent_editor/web'
 
+# Namespace for Torrent Editor
 module TorrentEditor
   VERSION = '0.1.0'
 end
