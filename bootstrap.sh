@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo apt-get update
-sudo apt-get install curl git postgresql-9.3 -y
+sudo apt-get install curl git libpq-dev postgresql-9.3 -y
 
 sudo -u postgres psql <<EOF
   alter user postgres with password 'postgres';
@@ -25,10 +25,11 @@ fi
 rvm requirements
 rvm install 2.2
 rvm use 2.2 --default
+rvmsudo gem install bundler
 
 cd /vagrant
 
 bundle install
 bundle exec rake db:create
 bundle exec rake db:migrate
-bundle exec rackup -p 3000 -o 0.0.0.0 -P ./tmp/server.pid -D
+bundle exec rackup -p 3000 -o 0.0.0.0 -P ./server.pid -D

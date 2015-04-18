@@ -6,7 +6,7 @@ gem 'rake'
 gem 'rack'
 
 gem 'thin'
-gem 'padrino'
+gem 'padrino-helpers'
 gem 'sinatra-contrib'
 gem 'sinatra-activerecord'
 
@@ -14,7 +14,6 @@ gem 'activerecord'
 gem 'pg'
 
 gem 'slim'
-gem 'quiet_assets'
 
 gem 'bencode', path: 'gems/bencode'
 
