@@ -7,7 +7,7 @@ gem 'rack'
 gem 'dotenv'
 
 gem 'thin'
-gem 'sinatra'
+gem 'padrino'
 gem 'sinatra-contrib'
 gem 'sinatra-activerecord'
 

@@ -13,11 +13,6 @@ class CreateTorrents < ActiveRecord::Migration
       t.integer :private
 
       t.string :name
-
-      t.integer :length
-      t.string :md5sum
-
-      t.jsonb :files
     end
   end
 end
